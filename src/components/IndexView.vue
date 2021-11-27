@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   data() {
@@ -59,17 +58,12 @@ export default {
   },
   methods: {},
   beforeMount() {
-    axios
-      .get("/api/TodoItems")
-      .then((response) => {
-        this.todos = response.data;
-        console.log(response.data);
-      })
-      .catch((error) => console.log(error));
+  
   },
   name: "IndexView",
 };
 </script>
 
 <style scoped>
+
 </style>

@@ -1,9 +1,7 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid SellBody">
     <h2 class="title">Product Infromation</h2>
-    <label for="">Search name:</label>
-    <!-- <input type="text">
-    <label for="">Select Type:</label> -->
+    <label for="">Search By name:</label>
     <select name="type" id="type" v-model="seleted" @change="getProducts()">
       <option value="All" selected>All</option>
       <option
@@ -33,14 +31,20 @@
       <div class="col-2 todo_item">{{ product.purchaseDate }}</div>
       <div class="col-2 todo_item">{{ product.cost }}</div>
       <div class="col-2 todo_item">
-        <button class="btn btn-warning" v-on:click="detail(product.id)">
+        <button
+          class="btn btn-outline-secondary"
+          v-on:click="detail(product.id)"
+        >
+          Detail
+        </button>
+        <button class="btn btn-outline-warning" v-on:click="sell(product.id)">
           Sell
         </button>
       </div>
     </div>
   </div>
-  <!-- Sell Form -->
-  <div class="container-fluid sellform">
+  <!-- Detail Form -->
+  <div class="container-fluid sellform" v-show="show">
     <h2 class="title" style="color: white">Sell Product</h2>
     <div class="mb-3 row">
       <label for="detail_name" class="col-sm-2 col-form-label badge bg-dark"
@@ -121,7 +125,61 @@
     </div>
     <div class="mb-3 row">
       <div class="col-sm-12">
-        <button class="btn btn-success" v-on:click="edittodo(id)">確認</button>
+        <button class="btn btn-success" v-on:click="edittodo(id)">
+          確認
+        </button>
+        <button class="btn btn-danger" v-on:click="close">取消</button>
+      </div>
+    </div>
+  </div>
+  <!-- Sell Form -->
+  <div class="container-fluid sellform" v-show="show2">
+    <h2 class="title" style="color: white">Sell Product</h2>
+    <div class="mb-3 row">
+      <label for="detail_name" class="col-sm-2 col-form-label badge bg-dark"
+        >產品名稱</label
+      >
+      <div class="col-sm-10">
+        <input
+          type="text"
+          class="form-control"
+          id="detail_name"
+          v-model="detail_name"
+          disabled
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mb-3 row">
+      <label for="detail_quantity" class="col-sm-2 col-form-label badge bg-dark">現有數量</label>
+      <div class="col-sm-4">
+        <input
+          type="text"
+          class="form-control"
+          id="detail_quantity"
+          v-model="detail_quantity"
+          disabled
+          readonly
+        />
+        </div>
+            <label
+          for="detail_quantity"
+          class="col-sm-2 col-form-label badge bg-dark"
+          >賣出數量</label>
+        <div class="col-sm-4">
+          <input
+            type="text"
+            class="form-control"
+            id="detail_quantity"
+            v-model="Sell_quantity"
+          />
+      </div>
+    </div>
+    <div class="mb-3 row">
+      <div class="col-sm-12">
+        <button class="btn btn-success" v-on:click="edittodo(id)">
+          確認
+        </button>
         <button class="btn btn-danger" v-on:click="close">取消</button>
       </div>
     </div>
@@ -143,6 +201,9 @@ export default {
       detail_cost: "",
       detail_price: "",
       detail_sellDate: "",
+      show: false,
+      show2: false,
+      sell_quantity:"",
     };
   },
   methods: {
@@ -169,7 +230,7 @@ export default {
         .catch((error) => console.log(error));
     },
     detail(id) {
-      this.edit = !this.edit;
+      this.show = !this.show;
       let url = "/api/Products/" + id;
       axios
         .get(url)
@@ -180,6 +241,22 @@ export default {
           this.detail_quantity = response.data.quantity;
           this.detail_purchaseDate = new Date(response.data.purchaseDate);
           this.detail_cost = response.data.cost;
+        })
+        .catch((error) => console.log(error));
+    },
+    close() {
+      this.show = false;
+      this.show2 = false;
+    },
+    sell(id) {
+      this.show2 = !this.show2;
+      let url = "/api/Products/" + id;
+      axios
+        .get(url)
+        .then((response) => {
+          //console.log(response.data.purchaseDate);
+          this.detail_name = response.data.name;
+          this.detail_quantity = response.data.quantity;
         })
         .catch((error) => console.log(error));
     },
@@ -206,8 +283,18 @@ h2.title {
   margin: 20px 0px;
 }
 .sellform {
-  background: linear-gradient(rgb(3, 88, 3), green);
-  border: solid 5px rgb(3, 88, 3);
+  background: linear-gradient(rgb(72, 163, 223), rgb(57, 207, 218));
+  /* border: solid 5px rgb(3, 88, 3); */
   border-radius: 20px;
+  position: fixed;
+  right: 15%;
+  left: 15%;
+  top: 15%;
+  width: 70%;
+  padding: 40px;
+}
+.SellBody{
+  background: linear-gradient(white,rgb(127, 255, 255));
+  padding: 20px;
 }
 </style>

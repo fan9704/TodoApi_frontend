@@ -1,7 +1,7 @@
 <template>
-  <div class="container-fluid">
-    <h2 class="title">商品進貨資訊</h2>
-    <button class="btn btn-primary" v-on:click="addform">進貨</button>
+  <div class="container-fluid productbody">
+    <h2 class="title">Product Purchase Infromation</h2>
+    <button class="btn btn-primary" v-on:click="addform">Purchase</button>
     <div class="row">
       <div class="col-2 todo_item">名稱</div>
       <div class="col-2 todo_item">類型</div>
@@ -32,7 +32,7 @@
   </div>
   <!-- editbox -->
   <div class="container-fluid editbox justify-content-center" v-show="edit">
-    <h2 class="title">編輯庫存</h2>
+    <h2 class="edittitle">編輯庫存<button class="btn btn-danger" v-on:click="close">X</button></h2>
     <div class="mb-3 row">
       <label for="detail_name" class="col-sm-2 col-form-label badge bg-dark"
         >產品名稱</label
@@ -109,7 +109,7 @@
   </div>
   <!-- addbox -->
   <div class="container-fluid addbox justify-content-center" v-show="add">
-    <h2 class="title">進貨</h2>
+    <h2 class="edittitle">Purchase New Product <button class="btn btn-danger" v-on:click="close">X</button></h2>
     <div class="mb-3 row">
       <label for="add_name" class="col-sm-2 col-form-label badge bg-dark"
         >產品名稱</label
@@ -295,12 +295,21 @@ h2.title {
   text-align: center;
   padding: 20px;
 }
+h2.edittitle{
+  text-align: center;
+  padding: 20px;
+  position: relative;
+}
+h2.edittitle .btn{
+  position: absolute;
+  top: 0;
+  right: -50px;
+}
 .row {
   margin: 20px 0px;
 }
 .editbox,
 .addbox {
-  border: 5px solid black;
   border-radius: 20px;
   padding: 0 50px;
   position: fixed;
@@ -308,10 +317,14 @@ h2.title {
   width: 70%;
   left: 15%;
   right: 15%;
-  background: linear-gradient(rgb(190, 190, 190), rgb(36, 175, 36));
+  background: linear-gradient(rgb(72, 163, 223), rgb(57, 207, 218));
 }
 .col-sm-12 .btn {
   padding: 6px 20px;
   margin: 5px;
+}
+.productbody{
+  background: linear-gradient(white,rgb(127, 255, 255));
+  padding: 20px;
 }
 </style>

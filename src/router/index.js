@@ -4,6 +4,7 @@ import IndexView from "../components/IndexView.vue"
 import TodolistView from "../components/Todolist.vue"
 import ProductView from "../components/Product.vue"
 import SellView from "../components/Sell.vue"
+import ReportView from "../components/Report.vue"
 const routes = [{
         path: '/',
         name: 'IndexView',
@@ -25,6 +26,11 @@ const routes = [{
         path: "/Sell",
         name: "SellView",
         component: SellView
+    },
+    {
+        path: "/Report",
+        name: "ReportView",
+        component: ReportView
     }
 ]
 

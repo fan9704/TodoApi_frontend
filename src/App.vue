@@ -14,6 +14,7 @@
          <router-link class="nav-link" to="/todoitems">TodoItems</router-link> 
          <router-link class="nav-link" to="/products">Products</router-link> 
          <router-link class="nav-link" to="/Sell">Sell</router-link> 
+         <router-link class="nav-link" to="/Report">Report</router-link> 
       </div>
     </div>
   </div>
