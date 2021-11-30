@@ -98,12 +98,11 @@
             alt="..."
           />
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">Cheaper Price</h5>
             <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+              Because our company have contraction with other our distrubtion that we have lower price for our customer
             </p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+            <a href="#" class="btn btn-primary">Go Shopping</a>
           </div>
         </div>
       </div>
@@ -115,10 +114,9 @@
             alt="..."
           />
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">Clear Environment</h5>
             <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+        Tim Shopping Mall has been evaluate as a world cleanest shopping mall ,we provide most comfortable alley and mall for our every customer
             </p>
             <a href="#" class="btn btn-primary">Go somewhere</a>
           </div>
@@ -167,16 +165,22 @@
     <h2 class="card-container-title">Comment</h2>
   </div>
   <!-- Contact -->
-  <div class="container-fluid contact-container" id="contact">
+  <div
+    class="container-fluid contact-container needs-validation"
+    id="contact"
+    novalidate
+  >
     <h2 class="card-container-title">Contact us</h2>
     <div class="row mb-3">
       <div class="col-6">
         <input
           type="text"
           class="form-control"
+          v-model="first_name"
           placeholder="First name"
           aria-label="First name"
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="col-6">
         <input
@@ -184,8 +188,10 @@
           class="form-control"
           placeholder="Last name"
           aria-label="Last name"
+          v-model="last_name"
         />
       </div>
+      <div class="valid-feedback">Looks good!</div>
     </div>
     <div class="row mb-3">
       <div class="col-12">
@@ -194,7 +200,9 @@
           class="form-control"
           id="exampleFormControlInput1"
           placeholder="name@example.com"
+          v-model="email"
         />
+        <div class="invalid-feedback">Please fill email.</div>
       </div>
     </div>
     <div class="row mb-3">
@@ -205,21 +213,23 @@
         <textarea
           class="form-control"
           id="exampleFormControlTextarea1"
+          v-model="commentTextarea"
           rows="3"
         ></textarea>
+        <div class="invalid-feedback">Please provide your comment.</div>
       </div>
     </div>
     <div class="mb-3 btn-group justify-content-ends">
-      <a class="btn btn-primary">Reset</a>
-      <a class="btn btn-primary">Submit</a>
+      <button class="btn btn-primary" v-on:click="reset">Reset</button>
+      <button class="btn btn-primary" type="submit" v-on:click="send">Submit</button>
     </div>
   </div>
   <!-- footer -->
   <div class="container-fluid footer row">
-      <hr>
+    <hr />
     <div class="col-6 img-container">
       <img
-        href="##"
+        href="https://www.facebook.com/tim.frank.969/"
         src="../assets/fb.png"
         alt=""
         width="30"
@@ -227,7 +237,7 @@
         class="d-inline-block align-text-bottom"
       />FaceBook
       <img
-        href="##"
+        href="https://www.instagram.com/cxz123499/"
         src="../assets/ig.png"
         alt=""
         width="30"
@@ -235,19 +245,44 @@
         class="d-inline-block align-text-bottom"
       />Instagram
     </div>
-    <div class="col-6 copyright d-inline-block align-text-bottom">&copy; Copyright 2021, Tim Shoping Mall Corporation</div>
+    <div class="col-6 copyright d-inline-block align-text-bottom">
+      &copy; Copyright 2021, Tim Shoping Mall Corporation
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       todos: [],
       show2: true,
+      first_name: "",
+      last_name: "",
+      email: "",
+      commentTextarea: "",
     };
   },
-  methods: {},
+  methods: {
+    reset() {
+      this.first_name = "";
+      this.last_name = "";
+      this.email = "";
+      this.commentTextarea = "";
+    },
+    send() {
+      //todo setup form validation
+      let config = {
+        fisrt_name: this.first_name,
+        last_name: this.last_name,
+        email: this.email,
+        comment: this.commentTextarea,
+      };
+      let url = "";
+      axios.post(url, config);
+    },
+  },
   beforeMount() {},
   name: "IndexView",
 };
@@ -289,7 +324,7 @@ export default {
 .btn-group {
   float: right;
 }
-.btn-group a {
+.btn-group button {
   background: linear-gradient(rgb(0, 132, 240), rgb(69, 30, 241));
   border: none;
 }
@@ -300,7 +335,7 @@ export default {
 .img-container {
   font-size: 20px;
 }
-.copyright{
+.copyright {
   float: right;
   text-align: right;
 }
