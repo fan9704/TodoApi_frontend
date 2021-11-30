@@ -99,7 +99,7 @@
       >
       <div class="col-sm-10">
         <input
-          type="date"
+          type="text"
           class="form-control"
           id="detail_purchasedate"
           v-model="detail_purchaseDate"
@@ -171,13 +171,13 @@
             type="text"
             class="form-control"
             id="detail_quantity"
-            v-model="Sell_quantity"
+            v-model="sell_quantity"
           />
       </div>
     </div>
     <div class="mb-3 row">
       <div class="col-sm-12">
-        <button class="btn btn-success" v-on:click="edittodo(id)">
+        <button class="btn btn-success" v-on:click="sellconfirm">
           確認
         </button>
         <button class="btn btn-danger" v-on:click="close">取消</button>
@@ -194,6 +194,7 @@ export default {
       products: [],
       selection: [],
       seleted: "",
+      detail_id: "",
       detail_name: "",
       detail_type: "",
       detail_quantity: "",
@@ -254,12 +255,36 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          //console.log(response.data.purchaseDate);
+          this.detail_id = response.data.id;
           this.detail_name = response.data.name;
+          this.detail_type = response.data.type;
           this.detail_quantity = response.data.quantity;
+          this.detail_purchaseDate = new Date(response.data.purchaseDate);
+          this.detail_cost = response.data.cost;
         })
         .catch((error) => console.log(error));
     },
+    sellconfirm(){
+      let url = "/api/Products/" + this.detail_id;
+      let Today=new Date();
+      let config={
+          "id": this.detail_id,
+          "name": this.detail_name,
+          "type": this.detail_type,
+          "quantity": this.detail_quantity-this.sell_quantity,
+          "purchaseDate": this.detail_purchaseDate,
+          "sellDate": Today.getFullYear()+"-"+Today.getMonth()+"-"+Today.getDate(),
+          "cost":this.detail_cost,
+          "price": this.detail_price,
+      };
+      console.log(config);
+       axios
+        .put(url,config)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => console.log(error));
+    }
   },
   mounted() {
     axios
@@ -267,6 +292,7 @@ export default {
       .then((response) => {
         this.products = response.data;
         this.selection = response.data;
+        
       })
       .catch((error) => console.log(error));
   },

@@ -80,7 +80,7 @@
       >
       <div class="col-sm-10">
         <input
-          type="date"
+          type="text"
           class="form-control"
           id="detail_purchasedate"
           v-model="detail_purchaseDate"
@@ -276,6 +276,7 @@ export default {
         })
         .catch((error) => console.log(error));
     },
+
   },
   beforeMount() {
     axios
