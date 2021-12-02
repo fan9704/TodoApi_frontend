@@ -101,7 +101,9 @@
 
 <script>
 import axios from "axios";
+
 export default {
+  
   data() {
     return {
       products: [],
@@ -117,6 +119,13 @@ export default {
       return sum;
     },
   },
+  watch: { /* 只要 chartData 改變，就要重新渲染圖表 */
+  chartData() {
+    this.$data._chart.destroy();  /* 官方文件 api 提供的 destroy() 方法 */
+    this.renderChart(this.chartData, this.options); /* 重新渲染圖表的 function */
+  },
+  deep: true,
+},
   created() {
     axios
       .get("/api/Products")

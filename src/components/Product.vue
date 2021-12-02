@@ -18,21 +18,21 @@
       <div class="col-2 todo_item">{{ product.name }}</div>
       <div class="col-2 todo_item">{{ product.type }}</div>
       <div class="col-2 todo_item">{{ product.quantity }}</div>
-      <div class="col-2 todo_item">{{ product.purchaseDate }}</div>
+      <div class="col-2 todo_item">{{ product.purchaseDate.split("T")[0] }}</div>
       <div class="col-2 todo_item">{{ product.cost }}</div>
       <div class="col-2 todo_item">
         <button class="btn btn-warning" v-on:click="detail(product.id)">
           Edit
         </button>
-        <button class="btn btn-danger" v-on:click="deltodo(product.id)">
-          Delete
-        </button>
+        <button class="btn btn-danger" v-on:click="deltodo">Delete</button>
       </div>
     </div>
   </div>
   <!-- editbox -->
   <div class="container-fluid editbox justify-content-center" v-show="edit">
-    <h2 class="edittitle">編輯庫存<button class="btn btn-danger" v-on:click="close">X</button></h2>
+    <h2 class="edittitle">
+      編輯庫存<button class="btn btn-danger" v-on:click="close">X</button>
+    </h2>
     <div class="mb-3 row">
       <label for="detail_name" class="col-sm-2 col-form-label badge bg-dark"
         >產品名稱</label
@@ -80,7 +80,7 @@
       >
       <div class="col-sm-10">
         <input
-          type="text"
+          type="date"
           class="form-control"
           id="detail_purchasedate"
           v-model="detail_purchaseDate"
@@ -109,7 +109,10 @@
   </div>
   <!-- addbox -->
   <div class="container-fluid addbox justify-content-center" v-show="add">
-    <h2 class="edittitle">Purchase New Product <button class="btn btn-danger" v-on:click="close">X</button></h2>
+    <h2 class="edittitle">
+      Purchase New Product
+      <button class="btn btn-danger" v-on:click="close">X</button>
+    </h2>
     <div class="mb-3 row">
       <label for="add_name" class="col-sm-2 col-form-label badge bg-dark"
         >產品名稱</label
@@ -179,9 +182,21 @@
     </div>
     <div class="mb-3 row">
       <div class="col-sm-12">
-        <button class="btn btn-success" v-on:click="edittodo(id)">確認</button>
+        <button class="btn btn-success" v-on:click="addtodo(id)">確認</button>
         <button class="btn btn-danger" v-on:click="close">取消</button>
       </div>
+    </div>
+  </div>
+  <!-- delbox -->
+  <div class="container-fluid delbox" v-show="del">
+    <h2 class="edittitle">Sure to Delete It?<button class="btn btn-danger" v-on:click="close">X</button></h2>
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+      <button type="button" class="btn btn-danger" v-on:click="close">
+        Cancel
+      </button>
+      <button type="button" class="btn btn-success" v-on:click="delconfirm(id)">
+        Confirm
+      </button>
     </div>
   </div>
 </template>
@@ -205,6 +220,7 @@ export default {
       add_purchaseDate: "",
       add_cost: "",
       add: false,
+      del: false,
     };
   },
   methods: {
@@ -214,11 +230,10 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          console.log(response.data.purchaseDate);
           this.detail_name = response.data.name;
           this.detail_type = response.data.type;
           this.detail_quantity = response.data.quantity;
-          this.detail_purchaseDate = new Date(response.data.purchaseDate);
+          this.detail_purchaseDate = response.data.purchaseDate.split("T")[0];
           this.detail_cost = response.data.cost;
         })
         .catch((error) => console.log(error));
@@ -229,6 +244,7 @@ export default {
     close() {
       this.edit = false;
       this.add = false;
+      this.del = false;
     },
     addtodo() {
       let config = {
@@ -236,16 +252,27 @@ export default {
         type: this.add_type,
         quantity: parseInt(this.add_quantity),
         purchaseDate: this.add_purchaseDate,
-        cost:parseInt(this.add_cost),
+        cost: parseInt(this.add_cost),
       };
-    
+
       axios
         .post("/api/Products", config)
         .then((response) => {
           console.log(response);
-          if(response.statusText=="Created"){
-              alert("Create Successed");
-              this.add=false;
+          if (response.statusText == "Created") {
+            alert("Create Successed");
+            this.add = false;
+            axios
+              .get("/api/Products")
+              .then((response) => {
+                this.products = response.data;
+                this.add_name = "";
+                this.add_type = "";
+                this.add_quantity = "";
+                this.add_purchaseDate = "";
+                this.add_cost = "";
+              })
+              .catch((error) => console.log(error));
           }
         })
         .catch((error) => console.log(error));
@@ -257,7 +284,7 @@ export default {
         type: this.detail_type,
         quantity: parseInt(this.detail_quantity),
         purchaseDate: this.detail_purchaseDate,
-        cost:parseInt(this.detail_cost),
+        cost: parseInt(this.detail_cost),
       };
       axios
         .put(url, config)
@@ -266,17 +293,19 @@ export default {
         })
         .catch((error) => console.log(error));
     },
-    deltodo(id) {
+    deltodo() {
+      this.del = !this.del;
+    },
+    delconfirm(id) {
       let url = "/api/Products/" + id;
       axios
         .delete(url)
         .then((response) => {
           console.log(response);
-          window.location.href("/api/Products");
+          this.del = false;
         })
         .catch((error) => console.log(error));
     },
-
   },
   beforeMount() {
     axios
@@ -296,12 +325,12 @@ h2.title {
   text-align: center;
   padding: 20px;
 }
-h2.edittitle{
+h2.edittitle {
   text-align: center;
   padding: 20px;
   position: relative;
 }
-h2.edittitle .btn{
+h2.edittitle .btn {
   position: absolute;
   top: 0;
   right: -50px;
@@ -320,12 +349,22 @@ h2.edittitle .btn{
   right: 15%;
   background: linear-gradient(rgb(72, 163, 223), rgb(57, 207, 218));
 }
+.delbox {
+  border-radius: 20px;
+  position: fixed;
+  padding: 0 50px;
+  top: 10%;
+  width: 30%;
+  left: 35%;
+  right: 35%;
+  background: linear-gradient(rgb(72, 163, 223), rgb(57, 207, 218));
+}
 .col-sm-12 .btn {
   padding: 6px 20px;
   margin: 5px;
 }
-.productbody{
-  background: linear-gradient(white,rgb(127, 255, 255));
+.productbody {
+  background: linear-gradient(white, rgb(127, 255, 255));
   padding: 20px;
 }
 </style>
