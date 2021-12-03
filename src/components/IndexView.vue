@@ -90,10 +90,10 @@
   <div class="container-fluid card-container" id="aboutus">
     <h2 class="card-container-title">About us</h2>
     <div class="row">
-      <div class="col-6">
+      <div class="col-4">
         <div class="card">
           <img
-            src="https://picsum.photos/200/150"
+            src="https://picsum.photos/200/150?random=1"
             class="card-img-top"
             alt="..."
           />
@@ -106,10 +106,10 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <div class="card">
           <img
-            src="https://picsum.photos/200/150"
+            src="https://picsum.photos/200/150?random=2"
             class="card-img-top"
             alt="..."
           />
@@ -122,42 +122,25 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
+    <!-- </div> -->
+    <!-- <div class="row"> -->
+      <div class="col-4">
         <div class="card">
           <img
-            src="https://picsum.photos/200/150"
+            src="https://picsum.photos/200/150?random=3"
             class="card-img-top"
             alt="..."
           />
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">Best Service</h5>
             <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+          Tim Shopping Mall only offer best service for our all customer
             </p>
             <a href="#" class="btn btn-primary">Go somewhere</a>
           </div>
         </div>
       </div>
-      <div class="col-6">
-        <div class="card">
-          <img
-            src="https://picsum.photos/200/150"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
+      
     </div>
   </div>
   <!-- Comment -->

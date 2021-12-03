@@ -18,7 +18,9 @@
       <div class="col-2 todo_item">{{ product.name }}</div>
       <div class="col-2 todo_item">{{ product.type }}</div>
       <div class="col-2 todo_item">{{ product.quantity }}</div>
-      <div class="col-2 todo_item">{{ product.purchaseDate.split("T")[0] }}</div>
+      <div class="col-2 todo_item">
+        {{ product.purchaseDate.split("T")[0] }}
+      </div>
       <div class="col-2 todo_item">{{ product.cost }}</div>
       <div class="col-2 todo_item">
         <button class="btn btn-warning" v-on:click="detail(product.id)">
@@ -102,7 +104,7 @@
     </div>
     <div class="mb-3 row">
       <div class="col-sm-12">
-        <button class="btn btn-success" v-on:click="close">確認</button>
+        <button class="btn btn-success" v-on:click="edittodo">確認</button>
         <button class="btn btn-danger" v-on:click="close">取消</button>
       </div>
     </div>
@@ -189,7 +191,11 @@
   </div>
   <!-- delbox -->
   <div class="container-fluid delbox" v-show="del">
-    <h2 class="edittitle">Sure to Delete It?<button class="btn btn-danger" v-on:click="close">X</button></h2>
+    <h2 class="edittitle">
+      Sure to Delete It?<button class="btn btn-danger" v-on:click="close">
+        X
+      </button>
+    </h2>
     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
       <button type="button" class="btn btn-danger" v-on:click="close">
         Cancel
@@ -214,6 +220,7 @@ export default {
       detail_quantity: "",
       detail_purchaseDate: "",
       detail_cost: "",
+      detail_price: "",
       add_name: "",
       add_type: "",
       add_quantity: "",
@@ -221,10 +228,12 @@ export default {
       add_cost: "",
       add: false,
       del: false,
+      id: "",
     };
   },
   methods: {
     detail(id) {
+      this.id = id;
       this.edit = !this.edit;
       let url = "/api/Products/" + id;
       axios
@@ -235,6 +244,7 @@ export default {
           this.detail_quantity = response.data.quantity;
           this.detail_purchaseDate = response.data.purchaseDate.split("T")[0];
           this.detail_cost = response.data.cost;
+          this.detail_price = response.data.price;
         })
         .catch((error) => console.log(error));
     },
@@ -277,22 +287,36 @@ export default {
         })
         .catch((error) => console.log(error));
     },
-    edittodo(id) {
+    edittodo() {
+      let id = this.id;
       let url = "/api/Products/" + id;
       let config = {
+        id: this.id,
         name: this.detail_name,
         type: this.detail_type,
         quantity: parseInt(this.detail_quantity),
         purchaseDate: this.detail_purchaseDate,
         cost: parseInt(this.detail_cost),
+        price: this.detail_price,
       };
       axios
         .put(url, config)
         .then((response) => {
           console.log(response);
+          if (response.status == 204) {
+            alert("Edit Successed");
+            this.edit = false;
+            axios
+              .get("/api/Products")
+              .then((response) => {
+                this.products = response.data;
+              })
+              .catch((error) => console.log(error));
+          }
         })
         .catch((error) => console.log(error));
     },
+
     deltodo() {
       this.del = !this.del;
     },
@@ -337,6 +361,11 @@ h2.edittitle .btn {
 }
 .row {
   margin: 20px 0px;
+}
+.btn-group {
+  width: 100%;
+  margin: auto;
+  padding: 20px;
 }
 .editbox,
 .addbox {

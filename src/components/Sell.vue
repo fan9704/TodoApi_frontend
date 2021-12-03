@@ -301,6 +301,7 @@ export default {
        .then((response) => {
           console.log(response);
           if(response.status==201){
+            this.show2=false;
             alert("Create Sell Record");
             axios
               .get("/api/Products")

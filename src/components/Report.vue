@@ -88,7 +88,7 @@
         <div class="col-2"></div>
         <div class="col-2"></div>
         <div class="col-2"></div>
-        <div class="col-2">Expected Net Profit</div>
+        <div class="col-2">This Period Net Profit</div>
         <input
           class="col-2 totalexpectedprofit"
           readonly
@@ -167,13 +167,20 @@ export default {
         labels: this.totalrecordname, // 標題
         datasets: [
           {
-            label: "# of Revenue", // 標籤
+            label: "Per Type of Revenue", // 標籤
             data: this.totalrecord, // 資料
             backgroundColor: [
-              // 背景色
               "rgb(0, 255, 170)",
             ],
-            borderWidth: 5, // 外框寬度
+            borderWidth: 5,
+          },
+            {
+            label: "Per Product of Revenue", // 標籤
+            data: this.singlerecord, // 資料
+            backgroundColor: [
+              "rgb(190, 233, 72)",
+            ],
+            borderWidth: 5, 
           },
         ],
       },
@@ -188,7 +195,7 @@ export default {
     });
     let ctx2 = document.getElementById("singleprofit");
     new Chart(ctx2, {
-      type: "bar", // 圖表類型
+      type: "line", // 圖表類型
       data: {
         labels: this.totalrecordname, // 標題
         datasets: [
