@@ -1,12 +1,12 @@
 <template>
   <div class="container-fluid ExpectedReportBody">
-    <h2 class="title">Net profit Expected for the period</h2>
+    <h2 class="title">Cost for the period</h2>
     <div class="row">
       <div class="col-2">Product</div>
       <div class="col-2">Cost</div>
       <div class="col-2">Price</div>
       <div class="col-2">Quantity</div>
-      <div class="col-2">Profit</div>
+      <div class="col-2">Cost</div>
     </div>
     <div
       class="container-fluid"
@@ -20,13 +20,13 @@
         <div class="col-2">{{ product.quantity }}</div>
         <input
           class="col-2"
-          v-bind:value="(product.price - product.cost) * product.quantity"
+          v-bind:value="(product.cost) * product.quantity"
           readonly
           disabled
         />
         <div class="col-2" v-show="false">
           {{
-            (total[index] = (product.price - product.cost) * product.quantity)
+            (total[index] = ( product.cost) * product.quantity)
           }}
         </div>
       </div>
@@ -38,7 +38,7 @@
         <div class="col-2"></div>
         <div class="col-2">Expected Net Profit</div>
         <input
-          class="col-2 totalexpectedprofit"
+          class="col-2 totalcost"
           readonly
           disabled
           v-bind:value="calculate"
@@ -100,6 +100,9 @@
     </div>
     <hr />
   </div>
+  <div class="container-fluid RateBody">
+
+  </div>
 </template>
 
 <script>
@@ -117,7 +120,7 @@ export default {
       singlerecord:[],
     };
   },
-  computed: {
+  computed: {//calculate sum record
     calculate() {
       let sum = 0;
       for (let i = 0; i < this.total.length; i++) {
@@ -133,8 +136,7 @@ export default {
       return sum;
     },
   },
-  watch: {
-    /* 只要 chartData 改變，就要重新渲染圖表 */
+  watch: {//watch chartdata 只要 chartData 改變，就要重新渲染圖表 
     chartData() {
       this.$data._chart.destroy(); /* 官方文件 api 提供的 destroy() 方法 */
       this.renderChart(
@@ -144,7 +146,7 @@ export default {
     },
     deep: true,
   },
-  created() {
+  created() {//get products and sellrecords
     axios
       .get("/api/Products")
       .then((response) => {
@@ -159,7 +161,7 @@ export default {
       })
       .catch((error) => console.log(error));
   },
-  updated() {
+  updated() {//chart
     let ctx = document.getElementById("example");
     new Chart(ctx, {
       type: "bar", // 圖表類型
@@ -232,12 +234,19 @@ h2.title {
 input.totalexpectedprofit {
   background: linear-gradient(rgb(30, 255, 30), rgb(0, 255, 13));
 }
+input.totalcost {
+  background: linear-gradient(rgb(255, 89, 89), rgb(248, 134, 134));
+}
 .ExpectedReportBody {
   background: linear-gradient(white, rgb(127, 255, 255));
   padding: 20px;
 }
 .ReportBody {
   background: linear-gradient(rgb(127, 255, 255), white);
+  padding: 20px;
+}
+.RateBody{
+  background: linear-gradient(white, rgb(127, 255, 255));
   padding: 20px;
 }
 </style>

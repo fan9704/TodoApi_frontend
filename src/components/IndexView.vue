@@ -207,31 +207,7 @@
       <button class="btn btn-primary" type="submit" v-on:click="send">Submit</button>
     </div>
   </div>
-  <!-- footer -->
-  <div class="container-fluid footer row">
-    <hr />
-    <div class="col-6 img-container">
-      <img
-        href="https://www.facebook.com/tim.frank.969/"
-        src="../assets/fb.png"
-        alt=""
-        width="30"
-        height="30"
-        class="d-inline-block align-text-bottom"
-      />FaceBook
-      <img
-        href="https://www.instagram.com/cxz123499/"
-        src="../assets/ig.png"
-        alt=""
-        width="30"
-        height="30"
-        class="d-inline-block align-text-bottom"
-      />Instagram
-    </div>
-    <div class="col-6 copyright d-inline-block align-text-bottom">
-      &copy; Copyright 2021, Tim Shoping Mall Corporation
-    </div>
-  </div>
+
 </template>
 
 <script>
@@ -311,15 +287,5 @@ export default {
   background: linear-gradient(rgb(0, 132, 240), rgb(69, 30, 241));
   border: none;
 }
-.footer {
-  padding: 0px 3%;
-  margin-top: 1%;
-}
-.img-container {
-  font-size: 20px;
-}
-.copyright {
-  float: right;
-  text-align: right;
-}
+
 </style>

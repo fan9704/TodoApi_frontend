@@ -11,6 +11,22 @@
 
         <%= htmlWebpackPlugin.options.title %>
     </title>
+    <style>
+        .footer {
+            padding: 0px 3%;
+            padding-top: 1%;
+            background: linear-gradient(rgb(127, 255, 255), white);
+        }
+        
+        .img-container {
+            font-size: 20px;
+        }
+        
+        .copyright {
+            float: right;
+            text-align: right;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,6 +35,17 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+
+    <div class="container-fluid footer">
+        <hr />
+        <div class="col-6 img-container">
+            <img href="https://www.facebook.com/tim.frank.969/" src="./fb.png" alt="" width="30" height="30" class="d-inline-block align-text-bottom" />FaceBook
+            <img href="https://www.instagram.com/cxz123499/" src="./ig.png" alt="" width="30" height="30" class="d-inline-block align-text-bottom" />Instagram
+        </div>
+        <div class="col-6 copyright d-inline-block align-text-bottom">
+            &copy; Copyright 2021, Tim Shoping Mall Corporation
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 

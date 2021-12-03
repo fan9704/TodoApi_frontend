@@ -28,7 +28,9 @@
       <div class="col-2 todo_item">{{ product.name }}</div>
       <div class="col-2 todo_item">{{ product.type }}</div>
       <div class="col-2 todo_item">{{ product.quantity }}</div>
-      <div class="col-2 todo_item">{{ product.purchaseDate.split("T")[0] }}</div>
+      <div class="col-2 todo_item">
+        {{ product.purchaseDate.split("T")[0] }}
+      </div>
       <div class="col-2 todo_item">{{ product.cost }}</div>
       <div class="col-2 todo_item">
         <button
@@ -45,7 +47,9 @@
   </div>
   <!-- Detail Form -->
   <div class="container-fluid sellform" v-show="show">
-    <h2 class="title" style="color: white">Sell Product<button class="btn btn-danger" v-on:click="close">X</button></h2>
+    <h2 class="title" style="color: white">
+      Sell Product<button class="btn btn-danger" v-on:click="close">X</button>
+    </h2>
     <div class="mb-3 row">
       <label for="detail_name" class="col-sm-2 col-form-label badge bg-dark"
         >產品名稱</label
@@ -132,7 +136,9 @@
   </div>
   <!-- Sell Form -->
   <div class="container-fluid sellform" v-show="show2">
-    <h2 class="title" style="color: white">Sell Product <button class="btn btn-danger" v-on:click="close">X</button></h2>
+    <h2 class="title" style="color: white">
+      Sell Product <button class="btn btn-danger" v-on:click="close">X</button>
+    </h2>
     <div class="mb-3 row">
       <label for="detail_name" class="col-sm-2 col-form-label badge bg-dark"
         >產品名稱</label
@@ -247,7 +253,7 @@ export default {
           this.detail_name = response.data.name;
           this.detail_type = response.data.type;
           this.detail_quantity = response.data.quantity;
-          this.detail_purchaseDate = (response.data.purchaseDate).split("T")[0];
+          this.detail_purchaseDate = response.data.purchaseDate.split("T")[0];
           this.detail_cost = response.data.cost;
         })
         .catch((error) => console.log(error));
@@ -274,12 +280,15 @@ export default {
     sellconfirm() {
       let url = "/api/Products/" + this.detail_id;
       let Today = new Date();
-      String(
-        Today.getFullYear() + "-" + Today.getMonth() + "-" + Today.getDay()
-      );
       let config = {
+        id: this.detail_id,
+        name: this.detail_name,
+        type: this.detail_type,
         quantity: this.detail_quantity - this.sell_quantity,
-        price:this.detail_price//todo fill all json or edit backend
+        purchaseDate: this.detail_purchaseDate,
+        sellDate: Today.getFullYear() + "-" + Today.getMonth() + "-" + Today.getDate(),
+        cost: 0,
+        price: this.detail_price, //todo fill all json or edit backend
       };
       console.log(config);
       axios
@@ -288,27 +297,31 @@ export default {
           console.log(response);
         })
         .catch((error) => console.log(error));
-       
-      let recordurl="/api/SellRecords";
-      let recordconfig={
-          "sell_quantity":parseInt(this.sell_quantity),
-          "name": this.detail_name,
-          "sellDate": Today.getFullYear()+"-"+Today.getMonth()+"-"+Today.getDate(),
-          "profit": String((parseInt(this.detail_price)-parseInt(this.detail_cost))*parseInt(this.sell_quantity))
-      }
-       console.log(recordconfig);
-       axios.post(recordurl,recordconfig)
-       .then((response) => {
+
+      let recordurl = "/api/SellRecords";
+      let recordconfig = {
+        sell_quantity: parseInt(this.sell_quantity),
+        name: this.detail_name,
+        sellDate:
+          Today.getFullYear() + "-" + Today.getMonth() + "-" + Today.getDate(),
+        profit: String(
+          (parseInt(this.detail_price) - parseInt(this.detail_cost)) *
+            parseInt(this.sell_quantity)
+        ),
+      };
+      console.log(recordconfig);
+      axios
+        .post(recordurl, recordconfig)
+        .then((response) => {
           console.log(response);
-          if(response.status==201){
-            this.show2=false;
+          if (response.status == 201) {
+            this.show2 = false;
             alert("Create Sell Record");
             axios
               .get("/api/Products")
               .then((response) => {
                 this.products = response.data;
                 this.selection = response.data;
-                
               })
               .catch((error) => console.log(error));
           }
@@ -316,7 +329,7 @@ export default {
         .catch((error) => console.log(error));
     },
   },
-  
+
   mounted() {
     axios
       .get("/api/Products")
