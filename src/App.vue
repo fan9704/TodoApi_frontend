@@ -11,10 +11,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
        <div class="navbar-nav">
          <router-link class="nav-link" to="/">Home</router-link> 
-         <router-link class="nav-link" to="/todoitems">TodoItems</router-link> 
+         <!-- <router-link class="nav-link" to="/todoitems">TodoItems</router-link>  -->
          <router-link class="nav-link" to="/products">Products</router-link> 
          <router-link class="nav-link" to="/Sell">Sell</router-link> 
          <router-link class="nav-link" to="/Report">Report</router-link> 
+      </div>
+      <div class="navbar-nav nav-right">
+        <router-link class="nav-link" to="/Login">Login</router-link> 
       </div>
     </div>
   </div>
@@ -24,5 +27,10 @@
 </template>
 
 <style>
-
+@media (min-width:1000px){
+.nav-right{
+  position: absolute;
+  right: 0px;
+ }
+}
 </style>
