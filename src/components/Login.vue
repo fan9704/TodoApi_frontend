@@ -28,7 +28,7 @@
         <button class="col-6 btn btn-info" v-on:click="login">Login</button>
       </div>
       <div class="row" style="text-align: center">
-        <div class="col-12" v-on:click="slidetoggle">Hasn,t Account Register Now!!</div>
+        <div class="col-12" v-on:click="slidetoggle">Hasn,t Account <a href="#"> Register Now!!</a></div>
       </div>
     </div>
     </transition>
@@ -63,7 +63,7 @@
         </button>
       </div>
       <div class="row" style="text-align: center">
-        <div class="col-12" v-on:click="slidetoggle">Has Account Login Now!!</div>
+        <div class="col-12" v-on:click="slidetoggle">Has Account<a href="#"> Login Now!!</a></div>
       </div>
     </div>
     </transition>
@@ -72,7 +72,7 @@
 
 <style scoped>
 .form-body {
-  background: linear-gradient(rgb(127, 255, 255), white);
+  background: linear-gradient(rgb(127, 255, 255), white,rgb(127, 255, 255));
   padding: 20px;
   height: 90vh;
 }
@@ -87,7 +87,7 @@ h2.title {
   border: 3px solid aqua;
   padding: 10px;
   background: linear-gradient(rgb(129, 236, 236), rgb(42, 191, 236));
-  position: fixed; 
+  position: absolute; 
    left: 10%;
   right: 10%; 
 }
@@ -98,9 +98,13 @@ h2.title {
   border: 3px solid aqua;
   padding: 10px;
   background: linear-gradient(rgb(129, 236, 236), rgb(42, 191, 236));
-  position: fixed; 
+  position: absolute; 
    left: 10%;
   right: 10%; 
+}
+.col-12 a{
+  text-decoration: none;
+  color:rgb(68, 104, 221);
 }
 .slide-leave-active,
 .slide-enter-active {
@@ -126,7 +130,7 @@ h2.title {
 
 </style>
 <script>
-import axios from "axios";
+// import axios from "axios";
 export default {
   data() {
     return {
@@ -145,14 +149,32 @@ export default {
         username: this.username,
         password: this.password,
       };
-      console.log(config);
-      axios
+      this.axios
         .post("/api/Account/Login", config)
         .then((response) => {
           if (response.data == true) {
             alert("Login Success");
           }else{
              alert("Login Fail");
+          }
+        })
+
+        .catch((error) => console.log(error));
+    },
+    register(){
+      let config = {
+        username: this.username,
+        password: this.password,
+      };
+      this.axios
+        .post("/api/Users", config)
+        .then((response) => {
+          console.log(response.status);
+          if (response.status == 201) {
+            this.isShow=!this.isShow;
+            alert("Register Success");
+          }else{
+             alert("Register Fail");
           }
         })
 

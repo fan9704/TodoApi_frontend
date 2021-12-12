@@ -14,19 +14,19 @@
       v-for="(product, index) in products"
     >
       <div class="row">
-        <div class="col-2">{{ product.name }}</div>
-        <div class="col-2">{{ product.cost }}</div>
-        <div class="col-2">{{ product.price }}</div>
-        <div class="col-2">{{ product.quantity }}</div>
+        <div class="col-2">{{ product.Name }}</div>
+        <div class="col-2">{{ product.Cost }}</div>
+        <div class="col-2">{{ product.Price }}</div>
+        <div class="col-2">{{ product.Quantity }}</div>
         <input
           class="col-2"
-          v-bind:value="product.cost * product.quantity"
+          v-bind:value="product.Cost * product.Quantity"
           readonly
           disabled
         />
 
         <div class="col-0" v-show="false">
-          {{ (total[index] = product.cost * product.quantity) }}
+          {{ (total[index] = product.Cost * product.Quantity) }}
         </div>
       </div>
     </div>
@@ -114,31 +114,31 @@
       v-for="(product, index) in Records"
     >
       <div class="row">
-        <div class="col-2">{{ product.id }}</div>
+        <div class="col-2">{{ product.Id }}</div>
         <div class="col-2">{{ product.name }}</div>
         <div class="col-2">{{ product.sell_quantity }}</div>
-        <div class="col-2">{{ product.sellDate }}</div>
-        <input class="col-2" v-bind:value="product.profit" readonly disabled />
+        <div class="col-2">{{ product.SellDate }}</div>
+        <input class="col-2" v-bind:value="product.Profit" readonly disabled />
         <div class="col-2 btn-group">
           <button
             type="button"
             class="btn btn-edit"
-            v-on:click="showedit(product.id)"
+            v-on:click="showedit(product.Id)"
           >
             Edit
           </button>
           <button
             type="button"
             class="btn btn-delete"
-            v-on:click="showdelete(product.id)"
+            v-on:click="showdelete(product.Id)"
           >
             Delete
           </button>
         </div>
         <div class="col-0" v-show="false">
-          {{ (totalrecord[index] = product.profit) }}
+          {{ (totalrecord[index] = product.Profit) }}
           {{ (totalrecordname[index] = product.name) }}
-          {{ (singlerecord[index] = product.profit / product.sell_quantity) }}
+          {{ (singlerecord[index] = product.Profit / product.sell_quantity) }}
         </div>
       </div>
     </div>
@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import Chart from "chart.js/dist/chart.js";
 export default {
   data() {
@@ -201,7 +201,7 @@ export default {
       console.log(this.showedi);
       let url = "/api/SellRecords/" + id;
       console.log(url);
-      axios
+      this.axios
         .get(url)
         .then((response) => console.log(response.data))
         .catch((error) => console.log(error));
@@ -219,14 +219,14 @@ export default {
         sellDate: this.detail_sellDate,
         profit: this.detail_profit,
       };
-      axios
+      this.axios
         .put(url, config)
         .then((response) => console.log(response.data))
         .catch((error) => console.log(error));
     },
     deleterecord(id) {
       let url = "/api/SellRecords/" + id;
-      axios
+      this.axios
         .delete(url)
         .then((response) => console.log(response.data))
         .catch((error) => console.log(error));
@@ -248,13 +248,13 @@ export default {
       }
       return sum;
     },
-    calculatefixedcost() {
-      let sum = 0;
-      for (let i = 0; i < this.totalfixed.length; i++) {
-        sum += parseInt(this.totalfixed[i]);
-      }
-      return sum;
-    },
+    // calculatefixedcost() {
+    //   let sum = 0;
+    //   for (let i = 0; i < this.totalfixed.length; i++) {
+    //     sum += parseInt(this.totalfixed[i]);
+    //   }
+    //   return sum;
+    // },
   },
   watch: {
     //watch chartdata 只要 chartData 改變，就要重新渲染圖表
@@ -269,25 +269,25 @@ export default {
   },
   created() {
     //get products and sellrecords
-    axios
+    this.axios
       .get("/api/Products")
       .then((response) => {
         this.products = response.data;
       })
       .catch((error) => console.log(error));
 
-    axios
+    this.axios
       .get("/api/SellRecords")
       .then((response) => {
         this.Records = response.data;
       })
       .catch((error) => console.log(error));
-    axios
-      .get("/api/FixCosts")
-      .then((response) => {
-        this.Fixed = response.data;
-      })
-      .catch((error) => console.log(error));
+    // this.axios
+    //   .get("/api/FixCosts")
+    //   .then((response) => {
+    //     this.Fixed = response.data;
+    //   })
+    //   .catch((error) => console.log(error));
   },
   updated() {
     //chart

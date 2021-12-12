@@ -12,18 +12,18 @@
     </div>
     <div
       class="row justify-content-center"
-      :key="product"
-      v-for="product in products"
+      :key="index"
+      v-for="(product,index) in products"
     >
-      <div class="col-2 todo_item">{{ product.name }}</div>
-      <div class="col-2 todo_item">{{ product.type }}</div>
-      <div class="col-2 todo_item">{{ product.quantity }}</div>
+      <div class="col-2 todo_item">{{ product.Name }}</div>
+      <div class="col-2 todo_item">{{ product.Type }}</div>
+      <div class="col-2 todo_item">{{ product.Quantity }}</div>
       <div class="col-2 todo_item">
-        {{ product.purchaseDate.split("T")[0] }}
+        {{ product.PurchaseDate.split("T")[0] }}
       </div>
-      <div class="col-2 todo_item">{{ product.cost }}</div>
+      <div class="col-2 todo_item">{{ product.Cost}}</div>
       <div class="col-2 todo_item">
-        <button class="btn btn-warning" v-on:click="detail(product.id)">
+        <button class="btn btn-warning" v-on:click="detail(product.Id)">
           Edit
         </button>
         <button class="btn btn-danger" v-on:click="deltodo">Delete</button>
@@ -208,7 +208,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   data() {
@@ -236,15 +236,15 @@ export default {
       this.id = id;
       this.edit = !this.edit;
       let url = "/api/Products/" + id;
-      axios
+      this.axios
         .get(url)
         .then((response) => {
-          this.detail_name = response.data.name;
-          this.detail_type = response.data.type;
-          this.detail_quantity = response.data.quantity;
-          this.detail_purchaseDate = response.data.purchaseDate.split("T")[0];
-          this.detail_cost = response.data.cost;
-          this.detail_price = response.data.price;
+          this.detail_name = response.data.Name;
+          this.detail_type = response.data.Type;
+          this.detail_quantity = response.data.Quantity;
+          this.detail_purchaseDate = response.data.PurchaseDate.split("T")[0];
+          this.detail_cost = response.data.Cost;
+          this.detail_price = response.data.Price;
         })
         .catch((error) => console.log(error));
     },
@@ -265,14 +265,14 @@ export default {
         cost: parseInt(this.add_cost),
       };
 
-      axios
+      this.axios
         .post("/api/Products", config)
         .then((response) => {
           console.log(response);
           if (response.statusText == "Created") {
             alert("Create Successed");
             this.add = false;
-            axios
+            this.axios
               .get("/api/Products")
               .then((response) => {
                 this.products = response.data;
@@ -299,14 +299,14 @@ export default {
         cost: parseInt(this.detail_cost),
         price: this.detail_price,
       };
-      axios
+      this.axios
         .put(url, config)
         .then((response) => {
           console.log(response);
           if (response.status == 204) {
             alert("Edit Successed");
             this.edit = false;
-            axios
+            this.axios
               .get("/api/Products")
               .then((response) => {
                 this.products = response.data;
@@ -322,7 +322,7 @@ export default {
     },
     delconfirm(id) {
       let url = "/api/Products/" + id;
-      axios
+      this.axios
         .delete(url)
         .then((response) => {
           console.log(response);
@@ -332,10 +332,9 @@ export default {
     },
   },
   beforeMount() {
-    axios
+    this.axios
       .get("/api/Products")
       .then((response) => {
-        //console.log(response);
         this.products = response.data;
       })
       .catch((error) => console.log(error));

@@ -5,11 +5,11 @@
     <select name="type" id="type" v-model="seleted" @change="getProducts()">
       <option value="All" selected>All</option>
       <option
-        v-bind:value="product.id"
+        v-bind:value="product.Id"
         :key="product"
         v-for="product in selection"
       >
-        {{ product.name }}
+        {{ product.Name }}
       </option>
     </select>
     <div class="row">
@@ -25,21 +25,21 @@
       :key="index"
       v-for="(product, index) in products"
     >
-      <div class="col-2 todo_item">{{ product.name }}</div>
-      <div class="col-2 todo_item">{{ product.type }}</div>
-      <div class="col-2 todo_item">{{ product.quantity }}</div>
+      <div class="col-2 todo_item">{{ product.Name }}</div>
+      <div class="col-2 todo_item">{{ product.Type }}</div>
+      <div class="col-2 todo_item">{{ product.Quantity }}</div>
       <div class="col-2 todo_item">
-        {{ product.purchaseDate.split("T")[0] }}
+        {{ product.PurchaseDate.split("T")[0] }}
       </div>
-      <div class="col-2 todo_item">{{ product.cost }}</div>
+      <div class="col-2 todo_item">{{ product.Cost }}</div>
       <div class="col-2 todo_item">
         <button
           class="btn btn-outline-secondary"
-          v-on:click="detail(product.id)"
+          v-on:click="detail(product.Id)"
         >
           Detail
         </button>
-        <button class="btn btn-outline-warning" v-on:click="sell(product.id)">
+        <button class="btn btn-outline-warning" v-on:click="sell(product.Id)">
           Sell
         </button>
       </div>
@@ -129,7 +129,7 @@
     </div>
     <div class="mb-3 row">
       <div class="col-sm-12">
-        <button class="btn btn-success" v-on:click="edittodo(id)">確認</button>
+        <button class="btn btn-success" v-on:click="edittodo(Id)">確認</button>
         <button class="btn btn-danger" v-on:click="close">取消</button>
       </div>
     </div>
@@ -201,7 +201,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 export default {
   data() {
     return {
@@ -226,16 +226,16 @@ export default {
       let url = "/api/Products/" + this.seleted;
       if (this.seleted == "All") {
         url = "/api/Products";
-        const { data } = await axios.get(url);
+        const { data } = await this.axios.get(url);
         this.products = data;
       } else {
-        const { data } = await axios.get(url);
+        const { data } = await this.axios.get(url);
         this.products = [data];
       }
     },
     getSingle(id) {
       let url = "/api/Products/" + id;
-      axios
+      this.axios
         .get(url)
         .then((response) => {
           console.log(response.data);
@@ -247,14 +247,14 @@ export default {
     detail(id) {
       this.show = !this.show;
       let url = "/api/Products/" + id;
-      axios
+      this.axios
         .get(url)
         .then((response) => {
-          this.detail_name = response.data.name;
-          this.detail_type = response.data.type;
-          this.detail_quantity = response.data.quantity;
-          this.detail_purchaseDate = response.data.purchaseDate.split("T")[0];
-          this.detail_cost = response.data.cost;
+          this.detail_name = response.data.Name;
+          this.detail_type = response.data.Type;
+          this.detail_quantity = response.data.Quantity;
+          this.detail_purchaseDate = response.data.PurchaseDate.split("T")[0];
+          this.detail_cost = response.data.Cost;
         })
         .catch((error) => console.log(error));
     },
@@ -265,15 +265,15 @@ export default {
     sell(id) {
       this.show2 = !this.show2;
       let url = "/api/Products/" + id;
-      axios
+      this.axios
         .get(url)
         .then((response) => {
-          this.detail_id = response.data.id;
-          this.detail_name = response.data.name;
-          this.detail_type = response.data.type;
-          this.detail_quantity = response.data.quantity;
-          this.detail_purchaseDate = new Date(response.data.purchaseDate);
-          this.detail_cost = response.data.cost;
+          this.detail_id = response.data.Id;
+          this.detail_name = response.data.Name;
+          this.detail_type = response.data.Type;
+          this.detail_quantity = response.data.Quantity;
+          this.detail_purchaseDate = new Date(response.data.PurchaseDate);
+          this.detail_cost = response.data.Cost;
         })
         .catch((error) => console.log(error));
     },
@@ -291,7 +291,7 @@ export default {
         price: this.detail_price, //todo fill all json or edit backend
       };
       console.log(config);
-      axios
+      this.axios
         .patch(url, config)
         .then((response) => {
           console.log(response);
@@ -310,14 +310,14 @@ export default {
         ),
       };
       console.log(recordconfig);
-      axios
+      this.axios
         .post(recordurl, recordconfig)
         .then((response) => {
           console.log(response);
           if (response.status == 201) {
             this.show2 = false;
             alert("Create Sell Record");
-            axios
+            this.axios
               .get("/api/Products")
               .then((response) => {
                 this.products = response.data;
@@ -331,7 +331,7 @@ export default {
   },
 
   mounted() {
-    axios
+    this.axios
       .get("/api/Products")
       .then((response) => {
         this.products = response.data;
