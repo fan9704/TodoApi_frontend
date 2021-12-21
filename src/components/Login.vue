@@ -164,7 +164,7 @@ export default {
         .then((response) => {
           if (response.data == true) {
             alert("Login Success");
-            window.location.href("/");
+            window.location.href="/";
           } else {
             this.errorMsg1=true;
           }

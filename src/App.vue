@@ -121,6 +121,12 @@ export default {
     } else {
       this.login = false;
     }
+    
+  },
+  created(){
+    if(!this.login && !String(window.location.href).split("/").includes("Login")){
+         window.location.href="/Login"
+    }
   },
 };
 </script>
