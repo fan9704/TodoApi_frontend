@@ -172,8 +172,8 @@
 </template>
 
 <script>
-// import axios from "axios";
 import Chart from "chart.js/dist/chart.js";
+// import { BarChart,LineChart } from "vue-chart-3";
 export default {
   data() {
     return {
